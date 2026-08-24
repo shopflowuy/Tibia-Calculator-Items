@@ -2,72 +2,218 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Calculadora de Precios de Tibia</title>
+  <title>Tibia Price Calculator - Juanki Zao</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 40px; background: #121212; color: #fff; }
-    .container { max-width: 400px; margin: auto; padding: 20px; border: 1px solid #333; border-radius: 8px; background: #1e1e1e; }
+    body {
+      font-family: 'Trebuchet MS', Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #0d0c1d url('https://e1.pxfuel.com/desktop-wallpaper/814/235/desktop-wallpaper-tibia-wallpaper-background.jpg') center top / cover no-repeat fixed;
+      color: #f0e6d2;
+    }
+    
+    .overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.75);
+      z-index: 1;
+    }
+
+    .container {
+      position: relative;
+      z-index: 2;
+      max-width: 480px;
+      margin: 30px auto;
+      padding: 25px;
+      border: 3px solid #b89758;
+      border-radius: 12px;
+      background: rgba(22, 18, 33, 0.92);
+      box-shadow: 0 0 20px rgba(0,0,0,0.8), inset 0 0 15px rgba(184, 151, 88, 0.2);
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 0;
+      color: #f7d070;
+      text-shadow: 2px 2px 4px #000;
+      letter-spacing: 2px;
+      font-size: 28px;
+    }
+
+    .config-box {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px dashed #7a633a;
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+    }
+
+    .config-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      color: #a89f91;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+
+    .config-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
     .field { margin-bottom: 15px; }
-    label { display: block; margin-bottom: 5px; font-weight: bold; }
-    input { width: 100%; padding: 8px; box-sizing: border-box; border-radius: 4px; border: 1px solid #444; background: #2a2a2a; color: #fff; }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #e3cca4;
+      font-size: 14px;
+    }
+
+    .small-label { font-size: 11px; color: #bbb; }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      box-sizing: border-box;
+      border-radius: 5px;
+      border: 1px solid #57462c;
+      background: #100d18;
+      color: #fff;
+      font-size: 15px;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #f7d070;
+      box-shadow: 0 0 5px rgba(247, 208, 112, 0.5);
+    }
+
+    .main-inputs {
+      border-top: 2px solid #57462c;
+      padding-top: 15px;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 13px;
+      color: #b89758;
+      font-style: italic;
+    }
   </style>
 </head>
 <body>
 
+<div class="overlay"></div>
+
 <div class="container">
-  <h2>Calculadora Tibia</h2>
+  <h1>⚔️ TIBIA ⚔️</h1>
   
-  <div class="field">
-    <label for="tc">Tibia Coins (TC):</label>
-    <input type="number" id="tc" placeholder="0" oninput="calcularDesdeTC(this.value)">
+  <!-- Configuración de tasas cambiantes -->
+  <div class="config-box">
+    <div class="config-title">⚙️ Tasas Configurables</div>
+    <div class="config-grid">
+      <div>
+        <label class="small-label" for="cfgUsdTc">USD por 250 TC:</label>
+        <input type="number" id="cfgUsdTc" value="12.5" step="0.1" oninput="recalcularUltimo()">
+      </div>
+      <div>
+        <label class="small-label" for="cfgGoldTc">Gold por 1 TC:</label>
+        <input type="number" id="cfgGoldTc" value="42000" step="100" oninput="recalcularUltimo()">
+      </div>
+    </div>
   </div>
 
-  <div class="field">
-    <label for="usd">Dólares (USD):</label>
-    <input type="number" id="usd" placeholder="0" oninput="calcularDesdeUSD(this.value)">
+  <!-- Entradas de datos principales -->
+  <div class="main-inputs">
+    <div class="field">
+      <label for="tc">Tibia Coins (TC):</label>
+      <input type="number" id="tc" placeholder="0" oninput="calcular('tc')">
+    </div>
+
+    <div class="field">
+      <label for="usd">Dólares (USD):</label>
+      <input type="number" id="usd" placeholder="0" oninput="calcular('usd')">
+    </div>
+
+    <div class="field">
+      <label for="kks">kk's (Millones GP):</label>
+      <input type="number" id="kks" placeholder="0" step="0.01" oninput="calcular('kks')">
+    </div>
+
+    <div class="field">
+      <label for="gold">Gold Coins (GP):</label>
+      <input type="number" id="gold" placeholder="0" oninput="calcular('gold')">
+    </div>
   </div>
 
-  <div class="field">
-    <label for="gold">Gold Coins (GP):</label>
-    <input type="number" id="gold" placeholder="0" oninput="calcularDesdeGold(this.value)">
-  </div>
+  <footer>Creado por Juanki Zao</footer>
 </div>
 
 <script>
-  // Tasas de conversión fijas según tus datos:
-  // 250 TC = 12.5 USD -> 1 TC = 0.05 USD
-  // 1 TC = 42,000 Gold
-  const USD_POR_TC = 12.5 / 250; 
-  const GOLD_POR_TC = 42000;
+  let ultimoModificado = 'tc';
 
-  function calcularDesdeTC(val) {
-    const tc = parseFloat(val);
-    if (isNaN(tc)) return limpiar();
+  function obtenerTasas() {
+    const usdPor250Tc = parseFloat(document.getElementById('cfgUsdTc').value) || 0;
+    const goldPorTc = parseFloat(document.getElementById('cfgGoldTc').value) || 0;
     
-    document.getElementById('usd').value = (tc * USD_POR_TC).toFixed(2);
-    document.getElementById('gold').value = Math.round(tc * GOLD_POR_TC);
+    return {
+      usdPorTc: usdPor250Tc / 250,
+      goldPorTc: goldPorTc
+    };
   }
 
-  function calcularDesdeUSD(val) {
-    const usd = parseFloat(val);
-    if (isNaN(usd)) return limpiar();
-    
-    const tc = usd / USD_POR_TC;
-    document.getElementById('tc').value = tc.toFixed(2);
-    document.getElementById('gold').value = Math.round(tc * GOLD_POR_TC);
+  function calcular(origen) {
+    if (origen) ultimoModificado = origen;
+    const { usdPorTc, goldPorTc } = obtenerTasas();
+    if (usdPorTc === 0 || goldPorTc === 0) return;
+
+    let tc = 0;
+    const val = parseFloat(document.getElementById(ultimoModificado).value);
+
+    if (isNaN(val) || val <= 0) {
+      limpiar();
+      return;
+    }
+
+    // Convertir el origen a TC
+    switch (ultimoModificado) {
+      case 'tc':
+        tc = val;
+        break;
+      case 'usd':
+        tc = val / usdPorTc;
+        break;
+      case 'kks':
+        tc = (val * 1000000) / goldPorTc;
+        break;
+      case 'gold':
+        tc = val / goldPorTc;
+        break;
+    }
+
+    // Actualizar los campos que no fueron la entrada activa
+    if (ultimoModificado !== 'tc') document.getElementById('tc').value = roundTo(tc, 2);
+    if (ultimoModificado !== 'usd') document.getElementById('usd').value = roundTo(tc * usdPorTc, 2);
+    if (ultimoModificado !== 'kks') document.getElementById('kks').value = roundTo((tc * goldPorTc) / 1000000, 3);
+    if (ultimoModificado !== 'gold') document.getElementById('gold').value = Math.round(tc * goldPorTc);
   }
 
-  function calcularDesdeGold(val) {
-    const gold = parseFloat(val);
-    if (isNaN(gold)) return limpiar();
-    
-    const tc = gold / GOLD_POR_TC;
-    document.getElementById('tc').value = tc.toFixed(2);
-    document.getElementById('usd').value = (tc * USD_POR_TC).toFixed(2);
+  function recalcularUltimo() {
+    calcular(ultimoModificado);
+  }
+
+  function roundTo(num, decimals) {
+    return +(Math.round(num + "e+" + decimals)  + "e-" + decimals);
   }
 
   function limpiar() {
     document.getElementById('tc').value = '';
     document.getElementById('usd').value = '';
+    document.getElementById('kks').value = '';
     document.getElementById('gold').value = '';
   }
 </script>
