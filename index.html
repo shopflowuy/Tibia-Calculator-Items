@@ -2,219 +2,631 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Tibia Price Calculator - Juanki Zao</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Control de Horas - HorasMel</title>
   <style>
-    body {
-      font-family: 'Trebuchet MS', Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
-      background: #0d0c1d url('https://e1.pxfuel.com/desktop-wallpaper/814/235/desktop-wallpaper-tibia-wallpaper-background.jpg') center top / cover no-repeat fixed;
-      color: #f0e6d2;
+    :root {
+      --primary: #4a90e2;
+      --primary-dark: #357abd;
+      --bg: #f4f6f9;
+      --card-bg: #ffffff;
+      --text: #333333;
+      --border: #dddddd;
     }
-    
-    .overlay {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.75);
-      z-index: 1;
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 15px;
+      background-color: var(--bg);
+      color: var(--text);
     }
 
     .container {
-      position: relative;
-      z-index: 2;
-      max-width: 480px;
-      margin: 30px auto;
-      padding: 25px;
-      border: 3px solid #b89758;
-      border-radius: 12px;
-      background: rgba(22, 18, 33, 0.92);
-      box-shadow: 0 0 20px rgba(0,0,0,0.8), inset 0 0 15px rgba(184, 151, 88, 0.2);
+      max-width: 750px;
+      margin: 0 auto;
     }
 
     h1 {
       text-align: center;
-      margin-top: 0;
-      color: #f7d070;
-      text-shadow: 2px 2px 4px #000;
-      letter-spacing: 2px;
-      font-size: 28px;
-    }
-
-    .config-box {
-      background: rgba(0, 0, 0, 0.4);
-      border: 1px dashed #7a633a;
-      padding: 12px;
-      border-radius: 6px;
+      color: var(--primary-dark);
+      font-size: 24px;
       margin-bottom: 20px;
     }
 
-    .config-title {
-      font-size: 12px;
-      text-transform: uppercase;
-      color: #a89f91;
-      margin-bottom: 8px;
-      font-weight: bold;
+    .card {
+      background: var(--card-bg);
+      padding: 18px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      margin-bottom: 20px;
     }
 
-    .config-grid {
+    .card-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 12px;
+      color: #555;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      text-align: center;
+    }
+
+    .summary-box {
+      background: #f8f9fa;
+      border: 1px solid var(--border);
+      padding: 10px;
+      border-radius: 8px;
+    }
+
+    .summary-box .val {
+      font-size: 18px;
+      font-weight: bold;
+      color: var(--primary-dark);
+      margin-top: 4px;
+    }
+
+    .summary-box .lbl {
+      font-size: 11px;
+      color: #777;
+      text-transform: uppercase;
+    }
+
+    .choferes-box {
+      margin-top: 15px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--border);
+    }
+
+    .chofer-linea {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      padding: 4px 0;
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      box-sizing: border-box;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 15px;
+    }
+
+    .row-2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
     }
 
-    .field { margin-bottom: 15px; }
-
-    label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: bold;
-      color: #e3cca4;
-      font-size: 14px;
-    }
-
-    .small-label { font-size: 11px; color: #bbb; }
-
-    input {
+    button {
       width: 100%;
-      padding: 10px;
-      box-sizing: border-box;
-      border-radius: 5px;
-      border: 1px solid #57462c;
-      background: #100d18;
-      color: #fff;
-      font-size: 15px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 5px;
     }
 
-    input:focus {
-      outline: none;
-      border-color: #f7d070;
-      box-shadow: 0 0 5px rgba(247, 208, 112, 0.5);
+    button:hover {
+      background: var(--primary-dark);
     }
 
-    .main-inputs {
-      border-top: 2px solid #57462c;
-      padding-top: 15px;
+    .btn-cancel {
+      background: #888;
+      margin-top: 8px;
+    }
+
+    .btn-print {
+      background: #27ae60;
+      font-size: 12px;
+      padding: 6px 12px;
+      width: auto;
+      margin-top: 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 13px;
+    }
+
+    th, td {
+      border: 1px solid var(--border);
+      padding: 8px;
+      text-align: center;
+    }
+
+    th {
+      background: #f1f3f5;
+      color: #495057;
+    }
+
+    .acciones-grid {
+      display: flex;
+      gap: 4px;
+      justify-content: center;
+    }
+
+    .btn-action {
+      border: none;
+      padding: 6px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .btn-edit { background: #f39c12; color: white; }
+    .btn-del { background: #e74c3c; color: white; }
+
+    .print-header {
+      display: none;
+    }
+
+    .sync-indicator {
+      text-align: center;
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 10px;
     }
 
     footer {
       text-align: center;
-      margin-top: 20px;
-      font-size: 13px;
-      color: #b89758;
-      font-style: italic;
+      margin-top: 30px;
+      font-size: 12px;
+      color: #888;
+    }
+
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 1.2cm;
+      }
+
+      body {
+        background: white !important;
+        color: black !important;
+        padding: 0 !important;
+      }
+
+      .container {
+        max-width: 100% !important;
+      }
+
+      h1, #cardFormularioRegistro, .btn-print, .acciones-col, .summary-grid, label[for="filtroMes"], #filtroMes, .sync-indicator, footer {
+        display: none !important;
+      }
+
+      .card {
+        box-shadow: none !important;
+        border: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+
+      .print-header {
+        display: block !important;
+        margin-bottom: 15px;
+      }
+
+      .print-header h2 {
+        font-size: 18px;
+        text-align: center;
+        margin-bottom: 12px;
+        text-decoration: underline;
+      }
+
+      .print-info-grid {
+        font-size: 13px;
+        line-height: 1.6;
+      }
+
+      .choferes-box {
+        display: block !important;
+        border-top: 2px solid #000 !important;
+        margin-top: 15px !important;
+        padding-top: 8px !important;
+        margin-bottom: 15px !important;
+      }
+
+      .chofer-linea {
+        font-size: 12px !important;
+        padding: 2px 0 !important;
+      }
+
+      table {
+        margin-top: 15px !important;
+        border: 1px solid #000 !important;
+        width: 100% !important;
+      }
+
+      th, td {
+        border: 1px solid #000 !important;
+        padding: 6px !important;
+        color: black !important;
+        font-size: 11px !important;
+      }
+
+      th {
+        background-color: #eee !important;
+        -webkit-print-color-adjust: exact;
+      }
     }
   </style>
 </head>
 <body>
 
-<div class="overlay"></div>
-
 <div class="container">
-  <h1>⚔️ TIBIA ⚔️</h1>
-  
-  <!-- Configuración de tasas cambiantes -->
-  <div class="config-box">
-    <div class="config-title">⚙️ Tasas Configurables</div>
-    <div class="config-grid">
-      <div>
-        <label class="small-label" for="cfgUsdTc">USD por 250 TC:</label>
-        <input type="number" id="cfgUsdTc" value="12.5" step="0.1" oninput="recalcularUltimo()">
-      </div>
-      <div>
-        <label class="small-label" for="cfgGoldTc">Gold por 1 TC:</label>
-        <input type="number" id="cfgGoldTc" value="42000" step="100" oninput="recalcularUltimo()">
-      </div>
+  <h1>📋 HorasMel - Registro Mensual</h1>
+  <div class="sync-indicator" id="estadoSinc">🔄 Cargando datos desde la nube...</div>
+
+  <div class="print-header">
+    <h2>Información de Horas de Arrendadores</h2>
+    <div class="print-info-grid">
+      <div><strong>Nombre del Chófer:</strong> Melany García</div>
+      <div><strong>Vehículo:</strong> Chevrolet Agile</div>
+      <div><strong>Matrícula:</strong> BEB 6518</div>
+      <div><strong>Mes:</strong> <span id="printMesTexto" style="font-weight: bold; text-transform: uppercase;"></span></div>
     </div>
   </div>
 
-  <!-- Entradas de datos principales -->
-  <div class="main-inputs">
-    <div class="field">
-      <label for="tc">Tibia Coins (TC):</label>
-      <input type="number" id="tc" placeholder="0" oninput="calcular('tc')">
+  <div class="card">
+    <div class="form-group">
+      <label for="filtroMes">Filtrar por Mes:</label>
+      <input type="month" id="filtroMes" onchange="renderizar()">
     </div>
 
-    <div class="field">
-      <label for="usd">Dólares (USD):</label>
-      <input type="number" id="usd" placeholder="0" oninput="calcular('usd')">
+    <div class="summary-grid">
+      <div class="summary-box">
+        <div class="lbl">Días Trabal.</div>
+        <div class="val" id="resDias">0</div>
+      </div>
+      <div class="summary-box">
+        <div class="lbl">Total Hs.</div>
+        <div class="val" id="resHoras">0.0</div>
+      </div>
+      <div class="summary-box">
+        <div class="lbl">Melany ($)</div>
+        <div class="val" id="resSaldo">$0</div>
+      </div>
     </div>
 
-    <div class="field">
-      <label for="kks">kk's (Millones GP):</label>
-      <input type="number" id="kks" placeholder="0" step="0.01" oninput="calcular('kks')">
-    </div>
-
-    <div class="field">
-      <label for="gold">Gold Coins (GP):</label>
-      <input type="number" id="gold" placeholder="0" oninput="calcular('gold')">
+    <div class="choferes-box">
+      <label style="font-weight: bold; margin-bottom: 6px; display: block;">⏱️ Suma de Horas por Chofer:</label>
+      <div id="resChoferes"></div>
     </div>
   </div>
 
-  <footer>Creado por Juanki Zao</footer>
+  <div class="card" id="cardFormularioRegistro">
+    <div class="card-title" id="formTitulo">✍️ Registrar Jornada</div>
+
+    <input type="hidden" id="editId">
+
+    <div class="form-group">
+      <label for="chofer">Nombre del Chofer:</label>
+      <input type="text" id="chofer" placeholder="Ej: Melany">
+    </div>
+
+    <div class="row-2">
+      <div class="form-group">
+        <label for="radio">Radio:</label>
+        <select id="radio">
+          <option value="900">900</option>
+          <option value="901">901</option>
+          <option value="902">902</option>
+          <option value="903">903</option>
+          <option value="904">904</option>
+          <option value="905">905</option>
+          <option value="Sonda">Sonda</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="fecha">Fecha:</label>
+        <input type="date" id="fecha">
+      </div>
+    </div>
+
+    <div class="row-2">
+      <div class="form-group">
+        <label for="horaEntrada">Entrada:</label>
+        <input type="time" id="horaEntrada">
+      </div>
+      <div class="form-group">
+        <label for="horaSalida">Salida:</label>
+        <input type="time" id="horaSalida">
+      </div>
+    </div>
+
+    <button id="btnGuardar" onclick="guardarJornada()">Guardar Jornada</button>
+    <button id="btnCancelar" class="btn-cancel" onclick="limpiarFormulario()" style="display: none;">Cancelar Edición</button>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <span>📅 Detalle del Mes</span>
+      <button class="btn-print" onclick="imprimirPlanilla()">🖨️ Imprimir / Guardar PDF</button>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>DIA</th>
+          <th>Radio</th>
+          <th>H. Entrada</th>
+          <th>H. Salida</th>
+          <th>Total Hrs</th>
+          <th>Servicio</th>
+          <th class="acciones-col">Acción</th>
+        </tr>
+      </thead>
+      <tbody id="tablaCuerpo"></tbody>
+    </table>
+  </div>
+
+  <footer>Creado por Juan Carlos Albin</footer>
 </div>
 
 <script>
-  let ultimoModificado = 'tc';
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxqjf1SNq6aFKJMtsXJqdftsnd7CWA2uexeyFXCZaiHYZt7U3V_E0ujebyXpZUPo27W9w/exec";
 
-  function obtenerTasas() {
-    const usdPor250Tc = parseFloat(document.getElementById('cfgUsdTc').value) || 0;
-    const goldPorTc = parseFloat(document.getElementById('cfgGoldTc').value) || 0;
+  const VALOR_HORA = 221;
+  let jornadas = [];
+
+  const NOMBRES_MESES = [
+    "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+    "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+  ];
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const hoy = new Date();
+    document.getElementById('fecha').value = hoy.toISOString().split('T')[0];
     
-    return {
-      usdPorTc: usdPor250Tc / 250,
-      goldPorTc: goldPorTc
-    };
+    const mesActual = hoy.toISOString().slice(0, 7);
+    document.getElementById('filtroMes').value = mesActual;
+
+    cargarDesdeNube();
+  });
+
+  function cargarDesdeNube() {
+    const estado = document.getElementById('estadoSinc');
+    estado.innerText = "🔄 Sincronizando con Google Drive...";
+
+    fetch(SCRIPT_URL)
+      .then(res => res.json())
+      .then(data => {
+        jornadas = Array.isArray(data) ? data : [];
+        localStorage.setItem('horas_mel_data', JSON.stringify(jornadas));
+        estado.innerText = "✅ Sincronizado en tiempo real";
+        renderizar();
+      })
+      .catch(err => {
+        console.error("Error al cargar:", err);
+        jornadas = JSON.parse(localStorage.getItem('horas_mel_data')) || [];
+        estado.innerText = "⚠️ Modo sin conexión (datos locales)";
+        renderizar();
+      });
   }
 
-  function calcular(origen) {
-    if (origen) ultimoModificado = origen;
-    const { usdPorTc, goldPorTc } = obtenerTasas();
-    if (usdPorTc === 0 || goldPorTc === 0) return;
+  function guardarEnNube() {
+    const estado = document.getElementById('estadoSinc');
+    estado.innerText = "⏳ Guardando en la nube...";
 
-    let tc = 0;
-    const val = parseFloat(document.getElementById(ultimoModificado).value);
+    localStorage.setItem('horas_mel_data', JSON.stringify(jornadas));
 
-    if (isNaN(val) || val <= 0) {
-      limpiar();
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(jornadas)
+    })
+    .then(res => res.json())
+    .then(res => {
+      if (res && res.status === "success") {
+        estado.innerText = "✅ Cambios guardados en la nube";
+      } else {
+        estado.innerText = "⚠️ Guardado local (error en respuesta de nube)";
+      }
+    })
+    .catch(err => {
+      console.error("Error al guardar:", err);
+      estado.innerText = "⚠️ Guardado local (sin conexión)";
+    });
+  }
+
+  function guardarJornada() {
+    const editId = document.getElementById('editId').value;
+    const chofer = document.getElementById('chofer').value.trim();
+    const radio = document.getElementById('radio').value;
+    const fecha = document.getElementById('fecha').value;
+    const horaEntrada = document.getElementById('horaEntrada').value;
+    const horaSalida = document.getElementById('horaSalida').value;
+
+    if (!fecha || !horaEntrada || !horaSalida) {
+      alert("Por favor completa la fecha y los horarios.");
       return;
     }
 
-    // Convertir el origen a TC
-    switch (ultimoModificado) {
-      case 'tc':
-        tc = val;
-        break;
-      case 'usd':
-        tc = val / usdPorTc;
-        break;
-      case 'kks':
-        tc = (val * 1000000) / goldPorTc;
-        break;
-      case 'gold':
-        tc = val / goldPorTc;
-        break;
+    const entrada = new Date(`${fecha}T${horaEntrada}`);
+    const salida = new Date(`${fecha}T${horaSalida}`);
+
+    let diffMs = salida - entrada;
+    if (diffMs < 0) {
+      diffMs += 24 * 60 * 60 * 1000;
     }
 
-    // Actualizar los campos que no fueron la entrada activa
-    if (ultimoModificado !== 'tc') document.getElementById('tc').value = roundTo(tc, 2);
-    if (ultimoModificado !== 'usd') document.getElementById('usd').value = roundTo(tc * usdPorTc, 2);
-    if (ultimoModificado !== 'kks') document.getElementById('kks').value = roundTo((tc * goldPorTc) / 1000000, 3);
-    if (ultimoModificado !== 'gold') document.getElementById('gold').value = Math.round(tc * goldPorTc);
+    const horasTrabajadas = diffMs / (1000 * 60 * 60);
+
+    if (horasTrabajadas === 0) {
+      alert("La hora de salida debe ser distinta a la de entrada.");
+      return;
+    }
+
+    if (editId) {
+      jornadas = jornadas.map(j => j.id == editId ? {
+        id: Number(editId),
+        chofer: chofer || 'Sin nombre',
+        radio: radio || '900',
+        fecha,
+        horaEntrada,
+        horaSalida,
+        horas: horasTrabajadas
+      } : j);
+    } else {
+      const nuevaJornada = {
+        id: Date.now(),
+        chofer: chofer || 'Sin nombre',
+        radio: radio || '900',
+        fecha,
+        horaEntrada,
+        horaSalida,
+        horas: horasTrabajadas
+      };
+      jornadas.push(nuevaJornada);
+    }
+
+    limpiarFormulario();
+    renderizar();
+    guardarEnNube();
   }
 
-  function recalcularUltimo() {
-    calcular(ultimoModificado);
+  function editarJornada(id) {
+    const reg = jornadas.find(j => j.id === id);
+    if (!reg) return;
+
+    document.getElementById('editId').value = reg.id;
+    document.getElementById('chofer').value = reg.chofer === 'Sin nombre' ? '' : reg.chofer;
+    document.getElementById('radio').value = reg.radio || '900';
+    document.getElementById('fecha').value = reg.fecha;
+    document.getElementById('horaEntrada').value = reg.horaEntrada;
+    document.getElementById('horaSalida').value = reg.horaSalida;
+
+    document.getElementById('formTitulo').innerText = "✏️ Modificar Jornada";
+    document.getElementById('btnGuardar').innerText = "Guardar Cambios";
+    document.getElementById('btnCancelar').style.display = "block";
+
+    window.scrollTo({ top: 200, behavior: 'smooth' });
   }
 
-  function roundTo(num, decimals) {
-    return +(Math.round(num + "e+" + decimals)  + "e-" + decimals);
+  function limpiarFormulario() {
+    document.getElementById('editId').value = '';
+    document.getElementById('chofer').value = '';
+    document.getElementById('horaEntrada').value = '';
+    document.getElementById('horaSalida').value = '';
+    document.getElementById('formTitulo').innerText = "✍️ Registrar Jornada";
+    document.getElementById('btnGuardar').innerText = "Guardar Jornada";
+    document.getElementById('btnCancelar').style.display = "none";
   }
 
-  function limpiar() {
-    document.getElementById('tc').value = '';
-    document.getElementById('usd').value = '';
-    document.getElementById('kks').value = '';
-    document.getElementById('gold').value = '';
+  function borrarJornada(id) {
+    if (confirm("¿Borrar este registro?")) {
+      jornadas = jornadas.filter(j => j.id !== id);
+      renderizar();
+      guardarEnNube();
+    }
+  }
+
+  function renderizar() {
+    const mesSeleccionado = document.getElementById('filtroMes').value;
+    const tbody = document.getElementById('tablaCuerpo');
+    tbody.innerHTML = '';
+
+    if (mesSeleccionado) {
+      const partesMes = mesSeleccionado.split('-');
+      const numMes = parseInt(partesMes[1], 10) - 1;
+      const anio = partesMes[0];
+      document.getElementById('printMesTexto').innerText = `${NOMBRES_MESES[numMes]} ${anio}`;
+    }
+
+    const jornadasFiltradas = jornadas.filter(j => j.fecha && j.fecha.startsWith(mesSeleccionado));
+    jornadasFiltradas.sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
+
+    let totalHorasGlobal = 0;
+    let totalHorasMelany = 0;
+    const diasUnicos = new Set();
+    const sumaPorChofer = {};
+
+    jornadasFiltradas.forEach(j => {
+      totalHorasGlobal += j.horas;
+      diasUnicos.add(j.fecha);
+
+      const nombreChofer = j.chofer.trim();
+      sumaPorChofer[nombreChofer] = (sumaPorChofer[nombreChofer] || 0) + j.horas;
+
+      if (nombreChofer.toLowerCase().includes('melany')) {
+        totalHorasMelany += j.horas;
+      }
+
+      const tr = document.createElement('tr');
+      const partesFecha = j.fecha.split('-');
+      const fechaFormateada = `${partesFecha[2]}/${partesFecha[1]}`;
+      const detalleServicio = `${j.chofer} de ${j.horaEntrada} a ${j.horaSalida}`;
+      const valorRadio = j.radio || '-';
+
+      tr.innerHTML = `
+        <td><strong>${fechaFormateada}</strong></td>
+        <td>${valorRadio}</td>
+        <td>${j.horaEntrada}</td>
+        <td>${j.horaSalida}</td>
+        <td>${j.horas.toFixed(2)} hs</td>
+        <td>${detalleServicio}</td>
+        <td class="acciones-col">
+          <div class="acciones-grid">
+            <button class="btn-action btn-edit" onclick="editarJornada(${j.id})">✏️</button>
+            <button class="btn-action btn-del" onclick="borrarJornada(${j.id})">✕</button>
+          </div>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    const saldoMelany = totalHorasMelany * VALOR_HORA;
+    document.getElementById('resDias').innerText = diasUnicos.size;
+    document.getElementById('resHoras').innerText = totalHorasGlobal.toFixed(1);
+    document.getElementById('resSaldo').innerText = "$" + Math.round(saldoMelany).toLocaleString();
+
+    const divChoferes = document.getElementById('resChoferes');
+    divChoferes.innerHTML = '';
+    const listaNombres = Object.keys(sumaPorChofer);
+
+    if (listaNombres.length === 0) {
+      divChoferes.innerHTML = '<div class="chofer-linea" style="color:#888;">No hay registros este mes</div>';
+    } else {
+      listaNombres.forEach(nombre => {
+        const div = document.createElement('div');
+        div.className = 'chofer-linea';
+        div.innerHTML = `<span>${nombre}:</span> <strong>${sumaPorChofer[nombre].toFixed(2)} hs</strong>`;
+        divChoferes.appendChild(div);
+      });
+    }
+  }
+
+  function imprimirPlanilla() {
+    window.print();
   }
 </script>
 
