@@ -3,632 +3,381 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Control de Horas - HorasMel</title>
+  <title>Tibia Tools & Calculators ⚔️</title>
   <style>
     :root {
-      --primary: #4a90e2;
-      --primary-dark: #357abd;
-      --bg: #f4f6f9;
-      --card-bg: #ffffff;
-      --text: #333333;
-      --border: #dddddd;
+      --bg-color: #0d1117;
+      --card-bg: #161b22;
+      --accent-green: #2ea043;
+      --accent-blue: #2f81f7;
+      --accent-yellow: #d29922;
+      --accent-red: #f85149;
+      --accent-purple: #a371f7;
+      --text-color: #c9d1d9;
+      --border-color: #30363d;
+      --input-bg: #0d1117;
     }
 
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
       margin: 0;
-      padding: 15px;
-      background-color: var(--bg);
-      color: var(--text);
+      padding: 20px;
+      display: flex;
+      justify-content: center;
     }
 
     .container {
-      max-width: 750px;
-      margin: 0 auto;
+      max-width: 1000px;
+      width: 100%;
     }
 
-    h1 {
+    .header {
       text-align: center;
-      color: var(--primary-dark);
-      font-size: 24px;
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 20px;
       margin-bottom: 20px;
+    }
+
+    .header h1 {
+      color: #ffffff;
+      margin: 0 0 8px 0;
+      font-size: 1.8rem;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 500px) {
+      .grid-2 { grid-template-columns: 1fr; }
     }
 
     .card {
-      background: var(--card-bg);
-      padding: 18px;
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
       border-radius: 10px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-      margin-bottom: 20px;
+      padding: 20px;
     }
 
-    .card-title {
-      font-size: 16px;
-      font-weight: bold;
-      margin-bottom: 12px;
-      color: #555;
-      border-bottom: 2px solid #eee;
-      padding-bottom: 5px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .summary-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      text-align: center;
-    }
-
-    .summary-box {
-      background: #f8f9fa;
-      border: 1px solid var(--border);
-      padding: 10px;
-      border-radius: 8px;
-    }
-
-    .summary-box .val {
-      font-size: 18px;
-      font-weight: bold;
-      color: var(--primary-dark);
-      margin-top: 4px;
-    }
-
-    .summary-box .lbl {
-      font-size: 11px;
-      color: #777;
-      text-transform: uppercase;
-    }
-
-    .choferes-box {
-      margin-top: 15px;
-      padding-top: 10px;
-      border-top: 1px dashed var(--border);
-    }
-
-    .chofer-linea {
-      display: flex;
-      justify-content: space-between;
-      font-size: 13px;
-      padding: 4px 0;
+    .card h2 {
+      margin: 0 0 15px 0;
+      font-size: 1.1rem;
+      color: #ffffff;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 8px;
     }
 
     .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
       margin-bottom: 12px;
     }
 
     label {
-      display: block;
-      font-size: 13px;
+      font-size: 0.85rem;
+      color: #8b949e;
       font-weight: 600;
-      margin-bottom: 4px;
     }
 
     input, select {
-      width: 100%;
+      background-color: var(--input-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
       padding: 10px;
+      color: #ffffff;
+      font-size: 0.95rem;
       box-sizing: border-box;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      font-size: 15px;
-    }
-
-    .row-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
-    button {
       width: 100%;
-      background: var(--primary);
-      color: white;
-      border: none;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--accent-blue);
+    }
+
+    .result-box {
+      background-color: rgba(47, 129, 247, 0.1);
+      border: 1px solid var(--accent-blue);
+      border-radius: 8px;
       padding: 12px;
-      border-radius: 6px;
-      font-size: 16px;
+      margin-top: 15px;
+      text-align: center;
+    }
+
+    .result-value {
+      font-size: 1.4rem;
       font-weight: bold;
-      cursor: pointer;
-      margin-top: 5px;
+      color: #56d364;
     }
 
-    button:hover {
-      background: var(--primary-dark);
-    }
-
-    .btn-cancel {
-      background: #888;
-      margin-top: 8px;
-    }
-
-    .btn-print {
-      background: #27ae60;
-      font-size: 12px;
-      padding: 6px 12px;
-      width: auto;
-      margin-top: 0;
+    .result-sub {
+      font-size: 0.85rem;
+      color: #8b949e;
+      margin-top: 4px;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 10px;
-      font-size: 13px;
+      font-size: 0.88rem;
     }
 
     th, td {
-      border: 1px solid var(--border);
+      border: 1px solid var(--border-color);
       padding: 8px;
-      text-align: center;
+      text-align: left;
     }
 
     th {
-      background: #f1f3f5;
-      color: #495057;
+      background-color: #21262d;
+      color: #ffffff;
     }
 
-    .acciones-grid {
-      display: flex;
-      gap: 4px;
-      justify-content: center;
-    }
-
-    .btn-action {
+    button {
+      background-color: var(--accent-blue);
+      color: #ffffff;
       border: none;
-      padding: 6px 8px;
-      border-radius: 4px;
+      border-radius: 6px;
+      padding: 10px 15px;
+      font-weight: bold;
       cursor: pointer;
-      font-size: 12px;
+      width: 100%;
+      margin-top: 8px;
     }
 
-    .btn-edit { background: #f39c12; color: white; }
-    .btn-del { background: #e74c3c; color: white; }
-
-    .print-header {
-      display: none;
-    }
-
-    .sync-indicator {
-      text-align: center;
-      font-size: 12px;
-      color: #666;
-      margin-bottom: 10px;
-    }
-
-    footer {
-      text-align: center;
-      margin-top: 30px;
-      font-size: 12px;
-      color: #888;
-    }
-
-    @media print {
-      @page {
-        size: A4 portrait;
-        margin: 1.2cm;
-      }
-
-      body {
-        background: white !important;
-        color: black !important;
-        padding: 0 !important;
-      }
-
-      .container {
-        max-width: 100% !important;
-      }
-
-      h1, #cardFormularioRegistro, .btn-print, .acciones-col, .summary-grid, label[for="filtroMes"], #filtroMes, .sync-indicator, footer {
-        display: none !important;
-      }
-
-      .card {
-        box-shadow: none !important;
-        border: none !important;
-        padding: 0 !important;
-        margin: 0 !important;
-      }
-
-      .print-header {
-        display: block !important;
-        margin-bottom: 15px;
-      }
-
-      .print-header h2 {
-        font-size: 18px;
-        text-align: center;
-        margin-bottom: 12px;
-        text-decoration: underline;
-      }
-
-      .print-info-grid {
-        font-size: 13px;
-        line-height: 1.6;
-      }
-
-      .choferes-box {
-        display: block !important;
-        border-top: 2px solid #000 !important;
-        margin-top: 15px !important;
-        padding-top: 8px !important;
-        margin-bottom: 15px !important;
-      }
-
-      .chofer-linea {
-        font-size: 12px !important;
-        padding: 2px 0 !important;
-      }
-
-      table {
-        margin-top: 15px !important;
-        border: 1px solid #000 !important;
-        width: 100% !important;
-      }
-
-      th, td {
-        border: 1px solid #000 !important;
-        padding: 6px !important;
-        color: black !important;
-        font-size: 11px !important;
-      }
-
-      th {
-        background-color: #eee !important;
-        -webkit-print-color-adjust: exact;
-      }
-    }
+    button:hover { opacity: 0.9; }
   </style>
 </head>
 <body>
 
-<div class="container">
-  <h1>📋 HorasMel - Registro Mensual</h1>
-  <div class="sync-indicator" id="estadoSinc">🔄 Cargando datos desde la nube...</div>
-
-  <div class="print-header">
-    <h2>Información de Horas de Arrendadores</h2>
-    <div class="print-info-grid">
-      <div><strong>Nombre del Chófer:</strong> Melany García</div>
-      <div><strong>Vehículo:</strong> Chevrolet Agile</div>
-      <div><strong>Matrícula:</strong> BEB 6518</div>
-      <div><strong>Mes:</strong> <span id="printMesTexto" style="font-weight: bold; text-transform: uppercase;"></span></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="form-group">
-      <label for="filtroMes">Filtrar por Mes:</label>
-      <input type="month" id="filtroMes" onchange="renderizar()">
+  <div class="container">
+    <div class="header">
+      <h1>⚔️ Tibia Dashboard & Calculadoras</h1>
+      <p style="margin: 0; color: #8b949e;">Conversión TC/GP, Shared XP, Party Hunt y Entrenamiento</p>
     </div>
 
-    <div class="summary-grid">
-      <div class="summary-box">
-        <div class="lbl">Días Trabal.</div>
-        <div class="val" id="resDias">0</div>
-      </div>
-      <div class="summary-box">
-        <div class="lbl">Total Hs.</div>
-        <div class="val" id="resHoras">0.0</div>
-      </div>
-      <div class="summary-box">
-        <div class="lbl">Melany ($)</div>
-        <div class="val" id="resSaldo">$0</div>
-      </div>
-    </div>
-
-    <div class="choferes-box">
-      <label style="font-weight: bold; margin-bottom: 6px; display: block;">⏱️ Suma de Horas por Chofer:</label>
-      <div id="resChoferes"></div>
-    </div>
-  </div>
-
-  <div class="card" id="cardFormularioRegistro">
-    <div class="card-title" id="formTitulo">✍️ Registrar Jornada</div>
-
-    <input type="hidden" id="editId">
-
-    <div class="form-group">
-      <label for="chofer">Nombre del Chofer:</label>
-      <input type="text" id="chofer" placeholder="Ej: Melany">
-    </div>
-
-    <div class="row-2">
-      <div class="form-group">
-        <label for="radio">Radio:</label>
-        <select id="radio">
-          <option value="900">900</option>
-          <option value="901">901</option>
-          <option value="902">902</option>
-          <option value="903">903</option>
-          <option value="904">904</option>
-          <option value="905">905</option>
-          <option value="Sonda">Sonda</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label for="fecha">Fecha:</label>
-        <input type="date" id="fecha">
-      </div>
-    </div>
-
-    <div class="row-2">
-      <div class="form-group">
-        <label for="horaEntrada">Entrada:</label>
-        <input type="time" id="horaEntrada">
-      </div>
-      <div class="form-group">
-        <label for="horaSalida">Salida:</label>
-        <input type="time" id="horaSalida">
-      </div>
-    </div>
-
-    <button id="btnGuardar" onclick="guardarJornada()">Guardar Jornada</button>
-    <button id="btnCancelar" class="btn-cancel" onclick="limpiarFormulario()" style="display: none;">Cancelar Edición</button>
-  </div>
-
-  <div class="card">
-    <div class="card-title">
-      <span>📅 Detalle del Mes</span>
-      <button class="btn-print" onclick="imprimirPlanilla()">🖨️ Imprimir / Guardar PDF</button>
-    </div>
-    <table>
-      <thead>
-        <tr>
-          <th>DIA</th>
-          <th>Radio</th>
-          <th>H. Entrada</th>
-          <th>H. Salida</th>
-          <th>Total Hrs</th>
-          <th>Servicio</th>
-          <th class="acciones-col">Acción</th>
-        </tr>
-      </thead>
-      <tbody id="tablaCuerpo"></tbody>
-    </table>
-  </div>
-
-  <footer>Creado por Juan Carlos Albin</footer>
-</div>
-
-<script>
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxqjf1SNq6aFKJMtsXJqdftsnd7CWA2uexeyFXCZaiHYZt7U3V_E0ujebyXpZUPo27W9w/exec";
-
-  const VALOR_HORA = 221;
-  let jornadas = [];
-
-  const NOMBRES_MESES = [
-    "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-    "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
-  ];
-
-  document.addEventListener('DOMContentLoaded', () => {
-    const hoy = new Date();
-    document.getElementById('fecha').value = hoy.toISOString().split('T')[0];
-    
-    const mesActual = hoy.toISOString().slice(0, 7);
-    document.getElementById('filtroMes').value = mesActual;
-
-    cargarDesdeNube();
-  });
-
-  function cargarDesdeNube() {
-    const estado = document.getElementById('estadoSinc');
-    estado.innerText = "🔄 Sincronizando con Google Drive...";
-
-    fetch(SCRIPT_URL)
-      .then(res => res.json())
-      .then(data => {
-        jornadas = Array.isArray(data) ? data : [];
-        localStorage.setItem('horas_mel_data', JSON.stringify(jornadas));
-        estado.innerText = "✅ Sincronizado en tiempo real";
-        renderizar();
-      })
-      .catch(err => {
-        console.error("Error al cargar:", err);
-        jornadas = JSON.parse(localStorage.getItem('horas_mel_data')) || [];
-        estado.innerText = "⚠️ Modo sin conexión (datos locales)";
-        renderizar();
-      });
-  }
-
-  function guardarEnNube() {
-    const estado = document.getElementById('estadoSinc');
-    estado.innerText = "⏳ Guardando en la nube...";
-
-    localStorage.setItem('horas_mel_data', JSON.stringify(jornadas));
-
-    fetch(SCRIPT_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify(jornadas)
-    })
-    .then(res => res.json())
-    .then(res => {
-      if (res && res.status === "success") {
-        estado.innerText = "✅ Cambios guardados en la nube";
-      } else {
-        estado.innerText = "⚠️ Guardado local (error en respuesta de nube)";
-      }
-    })
-    .catch(err => {
-      console.error("Error al guardar:", err);
-      estado.innerText = "⚠️ Guardado local (sin conexión)";
-    });
-  }
-
-  function guardarJornada() {
-    const editId = document.getElementById('editId').value;
-    const chofer = document.getElementById('chofer').value.trim();
-    const radio = document.getElementById('radio').value;
-    const fecha = document.getElementById('fecha').value;
-    const horaEntrada = document.getElementById('horaEntrada').value;
-    const horaSalida = document.getElementById('horaSalida').value;
-
-    if (!fecha || !horaEntrada || !horaSalida) {
-      alert("Por favor completa la fecha y los horarios.");
-      return;
-    }
-
-    const entrada = new Date(`${fecha}T${horaEntrada}`);
-    const salida = new Date(`${fecha}T${horaSalida}`);
-
-    let diffMs = salida - entrada;
-    if (diffMs < 0) {
-      diffMs += 24 * 60 * 60 * 1000;
-    }
-
-    const horasTrabajadas = diffMs / (1000 * 60 * 60);
-
-    if (horasTrabajadas === 0) {
-      alert("La hora de salida debe ser distinta a la de entrada.");
-      return;
-    }
-
-    if (editId) {
-      jornadas = jornadas.map(j => j.id == editId ? {
-        id: Number(editId),
-        chofer: chofer || 'Sin nombre',
-        radio: radio || '900',
-        fecha,
-        horaEntrada,
-        horaSalida,
-        horas: horasTrabajadas
-      } : j);
-    } else {
-      const nuevaJornada = {
-        id: Date.now(),
-        chofer: chofer || 'Sin nombre',
-        radio: radio || '900',
-        fecha,
-        horaEntrada,
-        horaSalida,
-        horas: horasTrabajadas
-      };
-      jornadas.push(nuevaJornada);
-    }
-
-    limpiarFormulario();
-    renderizar();
-    guardarEnNube();
-  }
-
-  function editarJornada(id) {
-    const reg = jornadas.find(j => j.id === id);
-    if (!reg) return;
-
-    document.getElementById('editId').value = reg.id;
-    document.getElementById('chofer').value = reg.chofer === 'Sin nombre' ? '' : reg.chofer;
-    document.getElementById('radio').value = reg.radio || '900';
-    document.getElementById('fecha').value = reg.fecha;
-    document.getElementById('horaEntrada').value = reg.horaEntrada;
-    document.getElementById('horaSalida').value = reg.horaSalida;
-
-    document.getElementById('formTitulo').innerText = "✏️ Modificar Jornada";
-    document.getElementById('btnGuardar').innerText = "Guardar Cambios";
-    document.getElementById('btnCancelar').style.display = "block";
-
-    window.scrollTo({ top: 200, behavior: 'smooth' });
-  }
-
-  function limpiarFormulario() {
-    document.getElementById('editId').value = '';
-    document.getElementById('chofer').value = '';
-    document.getElementById('horaEntrada').value = '';
-    document.getElementById('horaSalida').value = '';
-    document.getElementById('formTitulo').innerText = "✍️ Registrar Jornada";
-    document.getElementById('btnGuardar').innerText = "Guardar Jornada";
-    document.getElementById('btnCancelar').style.display = "none";
-  }
-
-  function borrarJornada(id) {
-    if (confirm("¿Borrar este registro?")) {
-      jornadas = jornadas.filter(j => j.id !== id);
-      renderizar();
-      guardarEnNube();
-    }
-  }
-
-  function renderizar() {
-    const mesSeleccionado = document.getElementById('filtroMes').value;
-    const tbody = document.getElementById('tablaCuerpo');
-    tbody.innerHTML = '';
-
-    if (mesSeleccionado) {
-      const partesMes = mesSeleccionado.split('-');
-      const numMes = parseInt(partesMes[1], 10) - 1;
-      const anio = partesMes[0];
-      document.getElementById('printMesTexto').innerText = `${NOMBRES_MESES[numMes]} ${anio}`;
-    }
-
-    const jornadasFiltradas = jornadas.filter(j => j.fecha && j.fecha.startsWith(mesSeleccionado));
-    jornadasFiltradas.sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
-
-    let totalHorasGlobal = 0;
-    let totalHorasMelany = 0;
-    const diasUnicos = new Set();
-    const sumaPorChofer = {};
-
-    jornadasFiltradas.forEach(j => {
-      totalHorasGlobal += j.horas;
-      diasUnicos.add(j.fecha);
-
-      const nombreChofer = j.chofer.trim();
-      sumaPorChofer[nombreChofer] = (sumaPorChofer[nombreChofer] || 0) + j.horas;
-
-      if (nombreChofer.toLowerCase().includes('melany')) {
-        totalHorasMelany += j.horas;
-      }
-
-      const tr = document.createElement('tr');
-      const partesFecha = j.fecha.split('-');
-      const fechaFormateada = `${partesFecha[2]}/${partesFecha[1]}`;
-      const detalleServicio = `${j.chofer} de ${j.horaEntrada} a ${j.horaSalida}`;
-      const valorRadio = j.radio || '-';
-
-      tr.innerHTML = `
-        <td><strong>${fechaFormateada}</strong></td>
-        <td>${valorRadio}</td>
-        <td>${j.horaEntrada}</td>
-        <td>${j.horaSalida}</td>
-        <td>${j.horas.toFixed(2)} hs</td>
-        <td>${detalleServicio}</td>
-        <td class="acciones-col">
-          <div class="acciones-grid">
-            <button class="btn-action btn-edit" onclick="editarJornada(${j.id})">✏️</button>
-            <button class="btn-action btn-del" onclick="borrarJornada(${j.id})">✕</button>
+    <div class="grid-2">
+      <!-- CONVERSOR TC / GP / FIAT -->
+      <div class="card">
+        <h2>💰 Conversor TC / Gold Coins / Moneda Real</h2>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <div class="form-group">
+            <label>Precio 1 TC en Gold (GP):</label>
+            <input type="number" id="tc-gp-price" value="38000" step="100">
           </div>
-        </td>
-      `;
-      tbody.appendChild(tr);
-    });
+          <div class="form-group">
+            <label>Dólar (USD / UYU):</label>
+            <input type="number" id="tc-uyu-rate" value="40.0" step="0.5">
+          </div>
+        </div>
 
-    const saldoMelany = totalHorasMelany * VALOR_HORA;
-    document.getElementById('resDias').innerText = diasUnicos.size;
-    document.getElementById('resHoras').innerText = totalHorasGlobal.toFixed(1);
-    document.getElementById('resSaldo').innerText = "$" + Math.round(saldoMelany).toLocaleString();
+        <div class="form-group">
+          <label>Cantidad de Tibia Coins (TC):</label>
+          <input type="number" id="input-tc" value="250" step="25">
+        </div>
 
-    const divChoferes = document.getElementById('resChoferes');
-    divChoferes.innerHTML = '';
-    const listaNombres = Object.keys(sumaPorChofer);
+        <div class="form-group">
+          <label>O Cantidad de Gold (GP):</label>
+          <input type="number" id="input-gp" placeholder="Ej. 10000000" step="100000">
+        </div>
 
-    if (listaNombres.length === 0) {
-      divChoferes.innerHTML = '<div class="chofer-linea" style="color:#888;">No hay registros este mes</div>';
-    } else {
-      listaNombres.forEach(nombre => {
-        const div = document.createElement('div');
-        div.className = 'chofer-linea';
-        div.innerHTML = `<span>${nombre}:</span> <strong>${sumaPorChofer[nombre].toFixed(2)} hs</strong>`;
-        divChoferes.appendChild(div);
-      });
+        <div class="result-box">
+          <div class="result-value" id="res-gp-equiv">0 GP</div>
+          <div class="result-sub" id="res-fiat-equiv">Equiv. $0 USD / $0 UYU</div>
+        </div>
+      </div>
+
+      <!-- SHARED XP CALCULATOR -->
+      <div class="card">
+        <h2>👥 Shared XP (Rango de Niveles)</h2>
+        <div class="form-group">
+          <label>Ingresa tu Nivel actual:</label>
+          <input type="number" id="input-level" value="200" min="1">
+        </div>
+
+        <div class="result-box" style="border-color: var(--accent-purple); background: rgba(163, 113, 247, 0.1);">
+          <div class="result-value" style="color: #d2a8ff;" id="res-xp-range">Nivel 134 a 300</div>
+          <div class="result-sub">Rango permitido de la Party para compartir experiencia</div>
+        </div>
+
+        <div style="margin-top: 15px; font-size: 0.85rem; color: #8b949e;">
+          <strong>Fórmula Oficial:</strong><br>
+          • Nivel Mínimo: <code>Nivel × 2 / 3</code><br>
+          • Nivel Máximo: <code>Nivel × 1.5</code>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <!-- PARTY HUNT PROFIT SPLITTER -->
+      <div class="card">
+        <h2>⚖️ Party Hunt Profit Splitter</h2>
+        <div class="form-group">
+          <label>Total Loot Recaudado (GP):</label>
+          <input type="number" id="party-loot" value="2000000" step="10000">
+        </div>
+
+        <label style="margin-top: 10px; display: block;">Waste Individual de Jugadores (GP):</label>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 5px;">
+          <input type="number" class="party-waste" placeholder="P1 Waste" value="150000">
+          <input type="number" class="party-waste" placeholder="P2 Waste" value="120000">
+          <input type="number" class="party-waste" placeholder="P3 Waste" value="180000">
+          <input type="number" class="party-waste" placeholder="P4 Waste" value="90000">
+        </div>
+
+        <button onclick="calcParty()">Calcular Reparto</button>
+
+        <div class="result-box" id="party-result-box" style="border-color: var(--accent-green); background: rgba(46, 160, 67, 0.1);">
+          <div class="result-value" id="party-net-profit">$0 GP</div>
+          <div class="result-sub" id="party-profit-per-player">Profit por jugador: $0 GP</div>
+        </div>
+      </div>
+
+      <!-- EXERCISE WEAPONS COST ESTIMATOR -->
+      <div class="card">
+        <h2>🎯 Exercise Weapons (Calculadora de Costos)</h2>
+        <div class="form-group">
+          <label>Tipo de Arma de Ejercicio:</label>
+          <select id="ex-weapon-type">
+            <option value="500">Regular (500 Cargas) - 262.5k GP / 25 TC</option>
+            <option value="1800">Durable (1800 Cargas) - 945k GP / 90 TC</option>
+            <option value="14400" selected>Lasting (14,400 Cargas) - 7.56M GP / 720 TC</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Cantidad de Armas a Usar:</label>
+          <input type="number" id="ex-weapon-qty" value="1" min="1">
+        </div>
+
+        <div class="result-box" style="border-color: var(--accent-yellow); background: rgba(210, 153, 34, 0.1);">
+          <div class="result-value" style="color: #e3b341;" id="ex-total-gp">7,560,000 GP</div>
+          <div class="result-sub" id="ex-total-tc">Equiv. 720 TC / 2 Horas de entrenamiento</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- CONVERSOR TC / GP ---
+    const inputTC = document.getElementById('input-tc');
+    const inputGP = document.getElementById('input-gp');
+    const tcPrice = document.getElementById('tc-gp-price');
+    const uyuRate = document.getElementById('tc-uyu-rate');
+
+    function updateConversor(source) {
+      const price = parseFloat(tcPrice.value) || 38000;
+      const rate = parseFloat(uyuRate.value) || 40.0;
+      const usdPerTC = 10 / 250; // 0.04 USD por TC base
+
+      let tc = 0;
+      let gp = 0;
+
+      if (source === 'tc') {
+        tc = parseFloat(inputTC.value) || 0;
+        gp = tc * price;
+        inputGP.value = gp ? Math.round(gp) : '';
+      } else {
+        gp = parseFloat(inputGP.value) || 0;
+        tc = price > 0 ? gp / price : 0;
+        inputTC.value = tc ? tc.toFixed(1) : '';
+      }
+
+      const usdEquiv = tc * usdPerTC;
+      const uyuEquiv = usdEquiv * rate;
+
+      document.getElementById('res-gp-equiv').innerText = `${Math.round(gp).toLocaleString('es-ES')} GP`;
+      document.getElementById('res-fiat-equiv').innerText = `Equiv. $${usdEquiv.toFixed(2)} USD / $${Math.round(uyuEquiv).toLocaleString('es-UY')} UYU (${tc.toFixed(0)} TC)`;
     }
-  }
 
-  function imprimirPlanilla() {
-    window.print();
-  }
-</script>
+    inputTC.addEventListener('input', () => updateConversor('tc'));
+    inputGP.addEventListener('input', () => updateConversor('gp'));
+    tcPrice.addEventListener('input', () => updateConversor('tc'));
+    uyuRate.addEventListener('input', () => updateConversor('tc'));
+    updateConversor('tc');
 
+    // --- SHARED XP ---
+    const inputLevel = document.getElementById('input-level');
+    function updateSharedXP() {
+      const lvl = parseInt(inputLevel.value) || 1;
+      const minLvl = Math.ceil(lvl * (2 / 3));
+      const maxLvl = Math.floor(lvl * 1.5);
+      document.getElementById('res-xp-range').innerText = `Nivel ${minLvl} a ${maxLvl}`;
+    }
+    inputLevel.addEventListener('input', updateSharedXP);
+    updateSharedXP();
+
+    // --- PARTY HUNT SPLITTER ---
+    function calcParty() {
+      const loot = parseFloat(document.getElementById('party-loot').value) || 0;
+      const wastes = Array.from(document.querySelectorAll('.party-waste'))
+                          .map(i => parseFloat(i.value) || 0);
+      
+      const totalWaste = wastes.reduce((a, b) => a + b, 0);
+      const netProfit = loot - totalWaste;
+      const profitPerPlayer = netProfit / wastes.length;
+
+      const resBox = document.getElementById('party-result-box');
+      if (netProfit >= 0) {
+        resBox.style.borderColor = 'var(--accent-green)';
+        resBox.style.background = 'rgba(46, 160, 67, 0.1)';
+        document.getElementById('party-net-profit').innerText = `+$${Math.round(netProfit).toLocaleString('es-ES')} GP (Profit Total)`;
+        document.getElementById('party-net-profit').style.color = '#56d364';
+      } else {
+        resBox.style.borderColor = 'var(--accent-red)';
+        resBox.style.background = 'rgba(248, 81, 73, 0.1)';
+        document.getElementById('party-net-profit').innerText = `-$${Math.round(Math.abs(netProfit)).toLocaleString('es-ES')} GP (Waste Total)`;
+        document.getElementById('party-net-profit').style.color = '#f85149';
+      }
+
+      document.getElementById('party-profit-per-player').innerText = `Cada jugador recibe de ganancia limpia: $${Math.round(profitPerPlayer).toLocaleString('es-ES')} GP (+ su Waste devuelto)`;
+    }
+    calcParty();
+
+    // --- EXERCISE WEAPONS ---
+    const exType = document.getElementById('ex-weapon-type');
+    const exQty = document.getElementById('ex-weapon-qty');
+
+    function updateExercise() {
+      const charges = parseInt(exType.value);
+      const qty = parseInt(exQty.value) || 1;
+
+      let gpPerWeapon = 262500;
+      let tcPerWeapon = 25;
+      let minutesPerWeapon = 16.6;
+
+      if (charges === 1800) {
+        gpPerWeapon = 945000;
+        tcPerWeapon = 90;
+        minutesPerWeapon = 60;
+      } else if (charges === 14400) {
+        gpPerWeapon = 7560000;
+        tcPerWeapon = 720;
+        minutesPerWeapon = 480;
+      }
+
+      const totalGP = gpPerWeapon * qty;
+      const totalTC = tcPerWeapon * qty;
+      const totalMinutes = minutesPerWeapon * qty;
+      const hours = (totalMinutes / 60).toFixed(1);
+
+      document.getElementById('ex-total-gp').innerText = `${totalGP.toLocaleString('es-ES')} GP`;
+      document.getElementById('ex-total-tc').innerText = `Equiv. ${totalTC.toLocaleString('es-ES')} TC | Tiempo: ${hours} hs de entrenamiento`;
+    }
+
+    exType.addEventListener('change', updateExercise);
+    exQty.addEventListener('input', updateExercise);
+    updateExercise();
+  </script>
 </body>
 </html>
